@@ -1,0 +1,40 @@
+{
+  "name": "tp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "prettier": "^1.12.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^16.3.1",
+    "react-scripts": "1.1.4",
+    "react-table": "^6.8.0",
+    "reactstrap": "^5.0.0",
+    "styled-components": "^3.2.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:5000/",
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-jsx": "^4.0.2",
+    "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.5.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.4.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
