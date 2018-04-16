@@ -32,8 +32,12 @@ class Table extends React.Component {
       .then(data => {
         const joinedData = data;
         data.forEach(element => {
-          element.status = this.statusDictionary[element.status];
-          element.os = this.osDictionary[element.os];
+          if (this.statusDictionary[element.status] !== null)
+            element.status = this.statusDictionary[element.status];
+          else element.status = 'NA';
+          if (this.osDictionary[element.os] !== null)
+            element.os = this.osDictionary[element.os];
+          else element.os = 'NA';
         });
         this.setState({ tableData: joinedData });
       });
@@ -42,6 +46,7 @@ class Table extends React.Component {
   StyledTable = styled(ReactTable)`
     max-height: 500px;
     margin-top: 100px;
+    text-align: center;
   `;
 
   columns = [
