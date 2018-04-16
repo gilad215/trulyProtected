@@ -44,8 +44,7 @@ class Table extends React.Component {
   }
 
   StyledTable = styled(ReactTable)`
-    max-height: 500px;
-    margin-top: 100px;
+    height: 700px;
     text-align: center;
   `;
 
