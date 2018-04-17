@@ -1,6 +1,5 @@
-/* eslint react/no-multi-comp: 0, react/prop-types: 0 */
-
 import React from 'react';
+import Proptypes from 'prop-types';
 import {
   Button,
   Modal,
@@ -62,7 +61,49 @@ class DetailsModal extends React.Component {
                   type="email"
                   name="email"
                   id="exampleEmail"
-                  placeholder={this.props.data.original.hostname}
+                  placeholder={this.props.data.row.hostname}
+                  readOnly
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleEmail" sm={2}>
+                IP
+              </Label>
+              <Col sm={10}>
+                <Input
+                  type="email"
+                  name="email"
+                  id="exampleEmail"
+                  placeholder={this.props.data.row.ip}
+                  readOnly
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleEmail" sm={2}>
+                Status
+              </Label>
+              <Col sm={10}>
+                <Input
+                  type="email"
+                  name="email"
+                  id="exampleEmail"
+                  placeholder={this.props.data.row.status}
+                  readOnly
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleEmail" sm={2}>
+                OS
+              </Label>
+              <Col sm={10}>
+                <Input
+                  type="email"
+                  name="email"
+                  id="exampleEmail"
+                  placeholder={this.props.data.row.os}
                   readOnly
                 />
               </Col>
@@ -76,10 +117,10 @@ class DetailsModal extends React.Component {
             <ModalHeader>Confirm</ModalHeader>
             <ModalBody>Are you sure you want to delete this machine?</ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={this.toggleNested}>
-                CONFIRM
+              <Button color="danger" onClick={this.toggleAll}>
+                DELETE
               </Button>{' '}
-              <Button color="secondary" onClick={this.toggleAll}>
+              <Button color="secondary" onClick={this.toggleNested}>
                 CANCEL
               </Button>
             </ModalFooter>
@@ -94,5 +135,15 @@ class DetailsModal extends React.Component {
     );
   }
 }
+
+DetailsModal.propTypes = {
+  data: Proptypes.object.isRequired,
+  toggle: Proptypes.func.isRequired,
+  className: Proptypes.string
+};
+
+DetailsModal.defaultProps = {
+  className: 'null'
+};
 
 export default DetailsModal;

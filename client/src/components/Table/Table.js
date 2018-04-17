@@ -77,6 +77,32 @@ class Table extends React.Component {
     text-align: center;
   `;
 
+  styleRows = (state, rowInfo, column, instance) => {
+    if (rowInfo && rowInfo.row) {
+      let color;
+      switch (rowInfo.row.status) {
+        default:
+          color = null;
+          break;
+        case 'Protected':
+          color = '#00800030';
+          break;
+        case 'Down':
+          color = '#ff000030';
+          break;
+        case 'Maintenance':
+          color = '#ffaa0045';
+          break;
+      }
+      return {
+        style: {
+          background: color
+        }
+      };
+    }
+    return {};
+  };
+
   columns = [
     {
       Header: 'ID',
@@ -108,11 +134,12 @@ class Table extends React.Component {
     return (
       <div>
         <this.StyledTable
-          className="-highlight"
+          className="-highlight -striped"
           data={this.state.tableData}
           columns={this.columns}
           filterable
           getTrProps={this.onRowClick}
+          getTdProps={this.styleRows}
         />
         {this.state.showRowBool && (
           <DetailsModal
