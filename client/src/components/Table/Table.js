@@ -2,46 +2,75 @@ import React from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import 'react-table/react-table.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
+import DetailsModal from '../Modal/DetailsModal';
 
 class Table extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      tableData: []
+      tableData: [],
+      statusDictionary: {},
+      osDictionary: {},
+      showRowBool: false,
+      showRowInfo: {}
     };
-    this.statusDictionary = {};
-    this.osDictionary = {};
   }
 
   componentDidMount() {
-    fetch(this.props.dictionaryURL)
+    this.fetchData(this.props.url, this.props.dictionaryURL);
+  }
+
+  onRowClick = (state, rowInfo, column) => ({
+    onClick: (e, handleOriginal) => {
+      console.log('row clicked!');
+      console.log('show?', this.state.showRowBool);
+      this.setState({
+        showRowBool: !this.state.showRowBool,
+        showRowInfo: rowInfo
+      });
+    }
+  });
+
+  toggleDataModal = () => {
+    this.setState({
+      showRowBool: !this.state.showRowBool
+    });
+  };
+
+  fetchData = async (dataURL, dictionaryURL) => {
+    await fetch(dictionaryURL)
       .then(results => results.json())
       .then(data => {
         data.status.forEach(element => {
-          this.statusDictionary[element.id] = element.name;
+          this.setState(prevstate => {
+            prevstate.statusDictionary[element.id] = element.name;
+          });
         });
         data.os.forEach(element => {
-          this.osDictionary[element.id] = element.name;
+          this.setState(prevstate => {
+            prevstate.osDictionary[element.id] = element.name;
+          });
         });
       });
 
-    fetch(this.props.url)
+    fetch(dataURL)
       .then(results => results.json())
       .then(data => {
         const joinedData = data;
-        data.forEach(element => {
-          if (this.statusDictionary[element.status] !== null)
-            element.status = this.statusDictionary[element.status];
-          else element.status = 'NA';
-          if (this.osDictionary[element.os] !== null)
-            element.os = this.osDictionary[element.os];
-          else element.os = 'NA';
+        joinedData.forEach(element => {
+          if (this.state.statusDictionary[element.status] !== undefined)
+            element.status = this.state.statusDictionary[element.status];
+          else element.status = 'N/A';
+          if (this.state.osDictionary[element.os] !== undefined)
+            element.os = this.state.osDictionary[element.os];
+          else element.os = 'N/A';
         });
         this.setState({ tableData: joinedData });
       });
-  }
+  };
 
   StyledTable = styled(ReactTable)`
     height: 700px;
@@ -75,26 +104,23 @@ class Table extends React.Component {
     }
   ];
 
-  updateTable = element => {
-    const dataToUpdate = this.state.tableData;
-    element.forEach(data => {
-      const row = {
-        hostname: data.hostname
-      };
-      dataToUpdate.push(row);
-    });
-    this.setState({ tableData: dataToUpdate });
-    console.log('tableData now:', this.state.tableData);
-  };
-
   render() {
     return (
-      <this.StyledTable
-        className="-highlight"
-        data={this.state.tableData}
-        columns={this.columns}
-        filterable
-      />
+      <div>
+        <this.StyledTable
+          className="-highlight"
+          data={this.state.tableData}
+          columns={this.columns}
+          filterable
+          getTrProps={this.onRowClick}
+        />
+        {this.state.showRowBool && (
+          <DetailsModal
+            data={this.state.showRowInfo}
+            toggle={this.toggleDataModal}
+          />
+        )}
+      </div>
     );
   }
 }

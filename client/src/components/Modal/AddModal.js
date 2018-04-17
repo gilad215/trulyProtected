@@ -35,7 +35,7 @@ class AddModal extends React.Component {
           onClick={this.toggle}
           style={{ marginBottom: '5px' }}
         >
-          Add
+          ADD
         </Button>
         <Modal
           isOpen={this.state.modal}
@@ -73,11 +73,11 @@ class AddModal extends React.Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>
-              Add
+            <Button color="success" onClick={this.toggle}>
+              ADD
             </Button>{' '}
             <Button color="secondary" onClick={this.toggle}>
-              Cancel
+              CANCEL
             </Button>
           </ModalFooter>
         </Modal>
