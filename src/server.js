@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -7,7 +8,7 @@ const pool = mysql.createPool({
   connectionLimit: 100, // important
   host: 'localhost',
   user: 'root',
-  password: '2121',
+  password: 'password',
   database: 'tp',
   debug: false
 });
@@ -75,6 +76,64 @@ function getDictionary(req, res) {
   });
 }
 
+function deleteMachine(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log(`connected as id ${connection.threadId}`);
+
+    const query = `delete from machines where id=${req.params.id}`;
+
+    connection.query(query, (error, result) => {
+      if (!error) {
+        console.log(result);
+      } else {
+        res.json({ code: 100, status: 'Data invalid' });
+      }
+    });
+
+    connection.on('error', error => {
+      res.json({ code: 100, status: 'Error in connection database' });
+    });
+  });
+}
+
+function insertMachine(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log(`connected as id ${connection.threadId}`);
+
+    const query = `insert into machines (\`id\`,\`hostname\`,\`ip\`,\`mac\`,\`status\`,\`os\`) 
+    values (${null},
+      "${req.body.hostname}",
+      "${req.body.ip}",
+      "${req.body.mac}",
+      ${req.body.status},
+      ${req.body.os})`;
+
+    connection.query(query, (error, result) => {
+      if (!error) {
+        console.log(result);
+      } else {
+        res.json({ code: 100, status: 'Data invalid' });
+      }
+    });
+
+    connection.on('error', error => {
+      res.json({ code: 100, status: 'Error in connection database' });
+    });
+  });
+}
+
 app.use((req, res, next) => {
   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -99,12 +158,22 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(bodyParser.json({ type: '*/*' }));
+
 app.get('/machines', (req, res) => {
   getMachines(req, res);
 });
 
 app.get('/getDictionary', (req, res) => {
   getDictionary(req, res);
+});
+
+app.post('/insert', (req, res) => {
+  insertMachine(req, res);
+});
+
+app.delete('/delete/:id', (req, res) => {
+  deleteMachine(req, res);
 });
 
 app.listen(5000);

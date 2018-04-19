@@ -16,7 +16,8 @@
     "mysql": "^2.5.4",
     "prettier": "^1.12.0",
     "prop-types": "^15.6.1",
-    "reactstrap": "^5.0.0"
+    "reactstrap": "^5.0.0",
+    "body-parser": "^1.8"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
