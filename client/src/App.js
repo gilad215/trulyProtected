@@ -20,9 +20,35 @@ class App extends React.Component {
     this.setState({ showModal: !this.state.showModal });
   };
 
-  handleAdd = (hostname, status, os) => {
-    // TODO Handle Add
-    console.log('handle add');
+  handleAdd = async (hostname, status, os, ip, mac) => {
+    const machine = {
+      hostname,
+      ip,
+      mac,
+      status,
+      os
+    };
+    console.log('machine: ', JSON.stringify(machine));
+    await fetch('http://localhost:3000/insert', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(machine)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(response => {
+        console.log('ok');
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   render() {

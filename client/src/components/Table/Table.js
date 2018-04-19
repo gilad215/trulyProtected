@@ -130,6 +130,10 @@ class Table extends React.Component {
     }
   ];
 
+  updateTable = () => {
+    this.fetchData(this.props.url, this.props.dictionaryURL);
+  };
+
   render() {
     return (
       <div>
@@ -145,6 +149,7 @@ class Table extends React.Component {
           <DetailsModal
             data={this.state.showRowInfo}
             toggle={this.toggleDataModal}
+            updateTable={this.updateTable}
           />
         )}
       </div>

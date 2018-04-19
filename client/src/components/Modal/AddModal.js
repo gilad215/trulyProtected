@@ -18,11 +18,13 @@ class AddModal extends React.Component {
     super(props);
     this.state = {
       modal: false,
-      statusDictionary: [],
-      osDictionary: [],
+      statusDictionary: {},
+      osDictionary: {},
       hostname: '',
-      status: 'Down',
-      os: 'Windows'
+      status: 1,
+      os: 1,
+      ip: '1.1.1.2',
+      mac: '4R:3A:5G:22'
     };
   }
 
@@ -33,19 +35,43 @@ class AddModal extends React.Component {
     await fetch(dictionaryURL)
       .then(results => results.json())
       .then(data => {
-        this.setState({ statusDictionary: data.status.slice() });
-        this.setState({ osDictionary: data.os.slice() });
+        data.status.forEach(element => {
+          this.setState(prevstate => {
+            prevstate.statusDictionary[element.id] = element.name;
+          });
+        });
+        data.os.forEach(element => {
+          this.setState(prevstate => {
+            prevstate.osDictionary[element.id] = element.name;
+          });
+        });
       });
+    console.log('statusDict:', this.state.statusDictionary);
+    console.log('osDict:', this.state.osDictionary);
   };
 
   handleChange = event => {
     if (
-      this.state.osDictionary.filter(
-        element => element.name === event.target.value
-      ).length === 0
-    )
-      this.setState({ status: event.target.value });
-    else this.setState({ os: event.target.value });
+      Object.keys(this.state.statusDictionary).find(
+        key => this.state.statusDictionary[key] === event.target.value
+      ) !== undefined
+    ) {
+      const status = parseInt(
+        Object.keys(this.state.statusDictionary).find(
+          key => this.state.statusDictionary[key] === event.target.value
+        ),
+        10
+      );
+      this.setState({ status });
+    } else {
+      const os = parseInt(
+        Object.keys(this.state.osDictionary).find(
+          key => this.state.osDictionary[key] === event.target.value
+        ),
+        10
+      );
+      this.setState({ os });
+    }
   };
 
   handleHostnameChange = event => {
@@ -92,11 +118,13 @@ class AddModal extends React.Component {
                   type="select"
                   name="selectStatus"
                   id="selectStatus"
-                  value={this.state.status}
+                  value={this.state.statusDictionary[this.state.status]}
                   onChange={this.handleChange}
                 >
-                  {this.state.statusDictionary.map((status, i) => (
-                    <option key={i}>{status.name}</option>
+                  {Object.keys(this.state.statusDictionary).map((status, i) => (
+                    <option key={i}>
+                      {this.state.statusDictionary[status]}
+                    </option>
                   ))}
                 </Input>
               </FormGroup>
@@ -106,11 +134,11 @@ class AddModal extends React.Component {
                   type="select"
                   name="selectOS"
                   id="exampleSelectOS"
-                  value={this.state.os}
+                  value={this.state.osDictionary[this.state.os]}
                   onChange={this.handleChange}
                 >
-                  {this.state.osDictionary.map((os, i) => (
-                    <option key={i}>{os.name}</option>
+                  {Object.keys(this.state.osDictionary).map((os, i) => (
+                    <option key={i}>{this.state.osDictionary[os]}</option>
                   ))}
                 </Input>
               </FormGroup>
@@ -123,7 +151,9 @@ class AddModal extends React.Component {
                 this.props.handleAdd(
                   this.state.hostname,
                   this.state.status,
-                  this.state.os
+                  this.state.os,
+                  this.state.ip,
+                  this.state.mac
                 )
               }
             >

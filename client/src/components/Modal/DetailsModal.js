@@ -23,6 +23,19 @@ class DetailsModal extends React.Component {
     };
   }
 
+  handleDelete = async id => {
+    await fetch(`http://localhost:3000/delete/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    this.toggleAll();
+    this.props.updateTable();
+  };
+
   toggle = () => {
     this.props.toggle();
   };
@@ -117,7 +130,10 @@ class DetailsModal extends React.Component {
             <ModalHeader>Confirm</ModalHeader>
             <ModalBody>Are you sure you want to delete this machine?</ModalBody>
             <ModalFooter>
-              <Button color="danger" onClick={this.toggleAll}>
+              <Button
+                color="danger"
+                onClick={() => this.handleDelete(this.props.data.row.id)}
+              >
                 DELETE
               </Button>{' '}
               <Button color="secondary" onClick={this.toggleNested}>
@@ -139,7 +155,8 @@ class DetailsModal extends React.Component {
 DetailsModal.propTypes = {
   data: Proptypes.object.isRequired,
   toggle: Proptypes.func.isRequired,
-  className: Proptypes.string
+  className: Proptypes.string,
+  updateTable: Proptypes.func.isRequired
 };
 
 DetailsModal.defaultProps = {
