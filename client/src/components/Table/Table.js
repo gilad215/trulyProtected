@@ -11,16 +11,9 @@ class Table extends React.Component {
     super(props);
 
     this.state = {
-      tableData: [],
-      statusDictionary: {},
-      osDictionary: {},
       showRowBool: false,
       showRowInfo: {}
     };
-  }
-
-  componentDidMount() {
-    this.fetchData(this.props.url, this.props.dictionaryURL);
   }
 
   onRowClick = (state, rowInfo, column) => ({
@@ -40,40 +33,8 @@ class Table extends React.Component {
     });
   };
 
-  fetchData = async (dataURL, dictionaryURL) => {
-    await fetch(dictionaryURL)
-      .then(results => results.json())
-      .then(data => {
-        data.status.forEach(element => {
-          this.setState(prevstate => {
-            prevstate.statusDictionary[element.id] = element.name;
-          });
-        });
-        data.os.forEach(element => {
-          this.setState(prevstate => {
-            prevstate.osDictionary[element.id] = element.name;
-          });
-        });
-      });
-
-    fetch(dataURL)
-      .then(results => results.json())
-      .then(data => {
-        const joinedData = data;
-        joinedData.forEach(element => {
-          if (this.state.statusDictionary[element.status] !== undefined)
-            element.status = this.state.statusDictionary[element.status];
-          else element.status = 'N/A';
-          if (this.state.osDictionary[element.os] !== undefined)
-            element.os = this.state.osDictionary[element.os];
-          else element.os = 'N/A';
-        });
-        this.setState({ tableData: joinedData });
-      });
-  };
-
   StyledTable = styled(ReactTable)`
-    height: 700px;
+    height: 570px;
     text-align: center;
   `;
 
@@ -130,16 +91,12 @@ class Table extends React.Component {
     }
   ];
 
-  updateTable = () => {
-    this.fetchData(this.props.url, this.props.dictionaryURL);
-  };
-
   render() {
     return (
       <div>
         <this.StyledTable
           className="-highlight -striped"
-          data={this.state.tableData}
+          data={this.props.tableData}
           columns={this.columns}
           filterable
           getTrProps={this.onRowClick}
@@ -149,7 +106,7 @@ class Table extends React.Component {
           <DetailsModal
             data={this.state.showRowInfo}
             toggle={this.toggleDataModal}
-            updateTable={this.updateTable}
+            handleDelete={this.props.handleDelete}
           />
         )}
       </div>
@@ -158,8 +115,8 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
-  url: PropTypes.string.isRequired,
-  dictionaryURL: PropTypes.string.isRequired
+  handleDelete: PropTypes.func.isRequired,
+  tableData: PropTypes.array.isRequired
 };
 
 export default Table;

@@ -50,6 +50,12 @@ class AddModal extends React.Component {
     console.log('osDict:', this.state.osDictionary);
   };
 
+  handleAdd = (hostname, status, os, ip, mac) => {
+    this.props.handleAdd(hostname, status, os, ip, mac);
+
+    this.toggle();
+  };
+
   handleChange = event => {
     if (
       Object.keys(this.state.statusDictionary).find(
@@ -148,7 +154,7 @@ class AddModal extends React.Component {
             <Button
               color="success"
               onClick={() =>
-                this.props.handleAdd(
+                this.handleAdd(
                   this.state.hostname,
                   this.state.status,
                   this.state.os,

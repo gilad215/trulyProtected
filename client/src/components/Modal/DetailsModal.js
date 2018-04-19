@@ -23,17 +23,9 @@ class DetailsModal extends React.Component {
     };
   }
 
-  handleDelete = async id => {
-    await fetch(`http://localhost:3000/delete/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
+  handleDelete = id => {
+    this.props.handleDelete(id);
     this.toggleAll();
-    this.props.updateTable();
   };
 
   toggle = () => {
@@ -156,7 +148,7 @@ DetailsModal.propTypes = {
   data: Proptypes.object.isRequired,
   toggle: Proptypes.func.isRequired,
   className: Proptypes.string,
-  updateTable: Proptypes.func.isRequired
+  handleDelete: Proptypes.func.isRequired
 };
 
 DetailsModal.defaultProps = {
