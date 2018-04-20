@@ -34,8 +34,8 @@ class Table extends React.Component {
   };
 
   StyledTable = styled(ReactTable)`
-    height: 570px;
     text-align: center;
+    border-radius: 8px;
   `;
 
   styleRows = (state, rowInfo, column, instance) => {

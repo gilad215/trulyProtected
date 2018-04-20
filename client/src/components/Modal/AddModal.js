@@ -101,13 +101,6 @@ class AddModal extends React.Component {
   render() {
     return (
       <div>
-        <Button
-          color="success"
-          onClick={this.toggle}
-          style={{ marginBottom: '5px' }}
-        >
-          ADD
-        </Button>
         <Modal
           isOpen={this.state.modal}
           toggle={this.toggle}

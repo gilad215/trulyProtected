@@ -13,6 +13,7 @@ class TableContainer extends React.Component {
       statusDictionary: {},
       osDictionary: {}
     };
+    this.modalRef = React.createRef();
   }
 
   componentDidMount() {
@@ -88,13 +89,19 @@ class TableContainer extends React.Component {
     });
   };
 
+  deployAdd = () => {
+    this.modalRef.current.toggle();
+  };
+
   render() {
     return (
       <Col xs={12} md={12}>
         <AddModal
           dictionaryURL="http://localhost:5000/getdictionary"
           handleAdd={this.handleAdd}
+          ref={this.modalRef}
         />
+
         <Table
           tableData={this.state.tableData}
           url={this.props.url}

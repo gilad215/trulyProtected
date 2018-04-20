@@ -6,7 +6,7 @@ import { Navbar } from 'reactstrap';
 const NanoNavbar = props => {
   const Stylednavbar = styled(Navbar)`
     border-bottom: 1px solid #e6e6e6;
-    background: #fafafa;
+    background: #fafbfc;
   `;
   return <Stylednavbar {...props}>{props.children}</Stylednavbar>;
 };
