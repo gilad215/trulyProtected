@@ -6,10 +6,14 @@ import { Nav, NavbarBrand } from 'reactstrap';
 import TableContainer from './components/Table/TableContainer';
 import NanoNavbar from './components/NavBar/NavBar';
 
+/* jshint expr:true */
+
 const App = props => (
   <div>
     <NanoNavbar color="Collapsed" light expand="md" fixed="top">
-      <NavbarBrand href="/">truly</NavbarBrand>
+      <NavbarBrand id="tpTitle" href="/">
+        Truly Protect Dashboard
+      </NavbarBrand>
       <Nav className="ml-auto" navbar />
     </NanoNavbar>
     <Grid id="Popover1" style={{ marginTop: '65px' }}>

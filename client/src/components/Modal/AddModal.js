@@ -23,8 +23,8 @@ class AddModal extends React.Component {
       hostname: '',
       status: 1,
       os: 1,
-      ip: '1.1.1.2',
-      mac: '4R:3A:5G:22'
+      ip: '',
+      mac: ''
     };
   }
 
@@ -84,6 +84,14 @@ class AddModal extends React.Component {
     this.setState({ hostname: event.target.value });
   };
 
+  handleIpChange = event => {
+    this.setState({ ip: event.target.value });
+  };
+
+  handleMacChange = event => {
+    this.setState({ mac: event.target.value });
+  };
+
   toggle = () => {
     this.setState({
       modal: !this.state.modal
@@ -116,6 +124,26 @@ class AddModal extends React.Component {
                   id="examplehostname"
                   placeholder="Enter Hostname"
                   onChange={this.handleHostnameChange}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="exampleip">IP</Label>
+                <Input
+                  type="name"
+                  name="ip"
+                  id="exampleip"
+                  placeholder="Enter IP Address"
+                  onChange={this.handleIpChange}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="examplemac">MAC</Label>
+                <Input
+                  type="name"
+                  name="mac"
+                  id="examplemac"
+                  placeholder="Enter MAC Address"
+                  onChange={this.handleMacChange}
                 />
               </FormGroup>
               <FormGroup>

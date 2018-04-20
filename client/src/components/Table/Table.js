@@ -98,6 +98,7 @@ class Table extends React.Component {
           className="-highlight -striped"
           data={this.props.tableData}
           columns={this.columns}
+          defaultPageSize={10}
           filterable
           getTrProps={this.onRowClick}
           getTdProps={this.styleRows}
