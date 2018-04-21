@@ -5,16 +5,47 @@ import { Grid, Row } from 'react-bootstrap';
 import { Nav, NavbarBrand, NavItem, Button } from 'reactstrap';
 import TableContainer from './components/Table/TableContainer';
 import NanoNavbar from './components/NavBar/NavBar';
+import NavAlert from './components/Alert/NavAlert';
 /* jshint expr:true */
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.handler = React.createRef();
+    this.state = {
+      alertType: 'success',
+      showAlert: false
+    };
   }
 
   addMachine = () => {
     this.handler.current.deployAdd();
+  };
+
+  handleAlert = type => {
+    if (type === 'addsuccess') {
+      this.setState({
+        showAlert: true,
+        alertType: 'success',
+        alertText: 'Added Machine Succesfully'
+      });
+    } else if (type === 'delsuccess') {
+      this.setState({
+        showAlert: true,
+        alertType: 'danger',
+        alertText: 'Deleted Machine Succesfully'
+      });
+    } else {
+      this.setState({
+        showAlert: true,
+        alertType: 'danger',
+        alertText: 'ERROR'
+      });
+    }
+  };
+
+  toggleAlert = () => {
+    this.setState({ showAlert: false });
   };
 
   render() {
@@ -25,6 +56,14 @@ class App extends React.Component {
             <img id="logoimg" src="/logo.ico" alt="" /> TrulyProtect
           </NavbarBrand>
           <Nav className="ml-auto" navbar style={{ marginRight: '8%' }}>
+            <NavItem style={{ lineHeight: '10px' }}>
+              <NavAlert
+                alertType={this.state.alertType}
+                showAlert={this.state.showAlert}
+                toggleAlert={this.toggleAlert}
+                alertText={this.state.alertText}
+              />
+            </NavItem>
             <NavItem href="/">
               <Button outline color="success" onClick={this.addMachine}>
                 ADD MACHINE
@@ -38,6 +77,7 @@ class App extends React.Component {
               url="http://localhost:5000/machines"
               dictionaryURL="http://localhost:5000/getdictionary"
               ref={this.handler}
+              handleAlert={this.handleAlert}
             />
           </Row>
         </Grid>

@@ -73,21 +73,13 @@ class TableContainer extends React.Component {
       .post('http://localhost:3000/insert', machine)
       .then(response => {
         if (response.status === 200) {
-          this.setState({
-            showAlert: true,
-            alertText: `Added Machine Successfully`,
-            alertType: 'success'
-          });
+          this.props.handleAlert('addsuccess');
           this.fetchData(this.props.url, this.props.dictionaryURL);
         }
       })
       .catch(error => {
         console.log(error);
-        this.setState({
-          showAlert: true,
-          alertText: `Error adding machine`,
-          alertType: 'danger'
-        });
+        this.props.handleAlert('danger');
       });
   };
 
@@ -96,21 +88,13 @@ class TableContainer extends React.Component {
       .delete(`http://localhost:3000/delete/${id}`)
       .then(response => {
         if (response.status === 200) {
-          this.setState({
-            showAlert: true,
-            alertText: `Deleted Machine Successfully`,
-            alertType: 'danger'
-          });
+          this.props.handleAlert('delsuccess');
           this.fetchData(this.props.url, this.props.dictionaryURL);
         }
       })
       .catch(error => {
         console.log(error);
-        this.setState({
-          showAlert: true,
-          alertText: `Error deleting machine`,
-          alertType: 'danger'
-        });
+        this.props.handleAlert('danger');
       });
   };
 
@@ -151,7 +135,8 @@ class TableContainer extends React.Component {
 
 TableContainer.propTypes = {
   url: PropTypes.string.isRequired,
-  dictionaryURL: PropTypes.string.isRequired
+  dictionaryURL: PropTypes.string.isRequired,
+  handleAlert: PropTypes.func.isRequired
 };
 
 export default TableContainer;
