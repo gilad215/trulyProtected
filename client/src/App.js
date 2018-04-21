@@ -3,10 +3,10 @@ import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Grid, Row } from 'react-bootstrap';
 import { Nav, NavbarBrand, NavItem, Button } from 'reactstrap';
+import '../node_modules/grommet-css';
 import TableContainer from './components/Table/TableContainer';
 import NanoNavbar from './components/NavBar/NavBar';
 import NavAlert from './components/Alert/NavAlert';
-/* jshint expr:true */
 
 class App extends React.Component {
   constructor(props) {

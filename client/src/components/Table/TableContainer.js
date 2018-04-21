@@ -21,10 +21,6 @@ class TableContainer extends React.Component {
 
   componentDidMount() {
     this.getDictionary(this.props.dictionaryURL);
-    // setInterval(
-    //   () => this.fetchData(this.props.url, this.props.dictionaryURL),
-    //   3000
-    // );
   }
 
   getDictionary = async dictionaryURL => {

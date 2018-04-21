@@ -5,6 +5,7 @@ import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
 import DetailsModal from '../Modal/DetailsModal';
+import StatusIcon from '../Icons/StatusIcon';
 
 class Table extends React.Component {
   constructor(props) {
@@ -32,40 +33,42 @@ class Table extends React.Component {
   };
 
   StyledTable = styled(ReactTable)`
-    text-align: center;
     border-radius: 8px;
   `;
-
-  styleRows = (state, rowInfo, column, instance) => {
-    if (rowInfo && rowInfo.row) {
-      let color;
-      switch (rowInfo.row.status) {
-        default:
-          color = null;
-          break;
-        case 'Protected':
-          color = '#00800030';
-          break;
-        case 'Down':
-          color = '#ff000030';
-          break;
-        case 'Maintenance':
-          color = '#ffaa0045';
-          break;
-      }
-      return {
-        style: {
-          background: color
-        }
-      };
-    }
-    return {};
-  };
 
   columns = [
     {
       Header: 'ID',
       accessor: 'id'
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      Cell: row => {
+        let type;
+        switch (row.value) {
+          default:
+            type = 'ok';
+            break;
+          case 'Protected':
+            type = 'ok';
+            break;
+          case 'Down':
+            type = 'critical';
+            break;
+          case 'Maintenance':
+            type = 'warning';
+            break;
+          case 'Up':
+            type = 'disabled';
+            break;
+        }
+        return (
+          <span>
+            <StatusIcon type={type} desc={row.value} rowId={row.index} />
+          </span>
+        );
+      }
     },
     {
       Header: 'Hostname',
@@ -78,10 +81,6 @@ class Table extends React.Component {
     {
       Header: 'MAC',
       accessor: 'mac'
-    },
-    {
-      Header: 'Status',
-      accessor: 'status'
     },
     {
       Header: 'OS',
@@ -99,7 +98,6 @@ class Table extends React.Component {
           defaultPageSize={10}
           filterable
           getTrProps={this.onRowClick}
-          getTdProps={this.styleRows}
         />
         {this.state.showRowBool && (
           <DetailsModal
