@@ -1,25 +1,15 @@
 import React from 'react';
 import Proptypes from 'prop-types';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Col
-} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import Dialog from 'material-ui/Dialog';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class DetailsModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: true,
-      nestedModal: false,
-      closeAll: false
+      nestedModal: false
     };
   }
 
@@ -34,27 +24,48 @@ class DetailsModal extends React.Component {
 
   toggleNested = () => {
     this.setState({
-      nestedModal: !this.state.nestedModal,
-      closeAll: false
+      nestedModal: !this.state.nestedModal
     });
   };
 
   toggleAll = () => {
     this.setState({
       nestedModal: !this.state.nestedModal,
-      closeAll: true
+      modal: !this.state.modal
     });
   };
 
   render() {
-    return (
-      <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-        className={this.props.className}
+    const actions = [
+      <Button color="danger" onClick={this.toggleNested}>
+        DELETE
+      </Button>,
+      ' ',
+      <Button color="secondary" onClick={this.toggle}>
+        EXIT
+      </Button>
+    ];
+    const nestedActions = [
+      <Button
+        color="danger"
+        onClick={() => this.handleDelete(this.props.data.row.id)}
       >
-        <ModalHeader toggle={this.toggle}>Details</ModalHeader>
-        <ModalBody>
+        DELETE
+      </Button>,
+      ' ',
+      <Button color="secondary" onClick={this.toggleNested}>
+        CANCEL
+      </Button>
+    ];
+    return (
+      <MuiThemeProvider>
+        <Dialog
+          title="DETAILS"
+          actions={actions}
+          modal={false}
+          open={this.state.modal}
+          onRequestClose={this.toggle}
+        >
           <Form>
             <FormGroup row>
               <Label for="exampleEmail" sm={2}>
@@ -113,32 +124,15 @@ class DetailsModal extends React.Component {
               </Col>
             </FormGroup>
           </Form>
-          <Modal
-            isOpen={this.state.nestedModal}
-            toggle={this.toggleNested}
-            onClosed={this.state.closeAll ? this.toggle : undefined}
-          >
-            <ModalHeader>Confirm</ModalHeader>
-            <ModalBody>Are you sure you want to delete this machine?</ModalBody>
-            <ModalFooter>
-              <Button
-                color="danger"
-                onClick={() => this.handleDelete(this.props.data.row.id)}
-              >
-                DELETE
-              </Button>{' '}
-              <Button color="secondary" onClick={this.toggleNested}>
-                CANCEL
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="danger" onClick={this.toggleNested}>
-            DELETE
-          </Button>
-        </ModalFooter>
-      </Modal>
+          <Dialog
+            title="Confirm Delete"
+            actions={nestedActions}
+            modal
+            open={this.state.nestedModal}
+            onRequestClose={this.toggleNested}
+          />
+        </Dialog>
+      </MuiThemeProvider>
     );
   }
 }
@@ -146,12 +140,7 @@ class DetailsModal extends React.Component {
 DetailsModal.propTypes = {
   data: Proptypes.object.isRequired,
   toggle: Proptypes.func.isRequired,
-  className: Proptypes.string,
   handleDelete: Proptypes.func.isRequired
-};
-
-DetailsModal.defaultProps = {
-  className: 'null'
 };
 
 export default DetailsModal;

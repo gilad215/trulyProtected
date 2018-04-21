@@ -1,17 +1,9 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
 import React from 'react';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Col } from 'reactstrap';
+import Dialog from 'material-ui/Dialog';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class AddModal extends React.Component {
   constructor(props) {
@@ -97,18 +89,41 @@ class AddModal extends React.Component {
   };
 
   render() {
+    const actions = [
+      <Button
+        color="success"
+        onClick={() =>
+          this.handleAdd(
+            this.state.hostname,
+            this.state.status,
+            this.state.os,
+            this.state.ip,
+            this.state.mac
+          )
+        }
+      >
+        SUBMIT
+      </Button>,
+      ' ',
+      <Button color="secondary" onClick={this.toggle}>
+        CANCEL
+      </Button>
+    ];
     return (
-      <div>
-        <Modal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-          className={this.props.className}
+      <MuiThemeProvider>
+        <Dialog
+          title="ADD MACHINE"
+          actions={actions}
+          modal={false}
+          open={this.state.modal}
+          onRequestClose={this.toggle}
         >
-          <ModalHeader toggle={this.toggle}>Add a Machine</ModalHeader>
-          <ModalBody>
-            <Form>
-              <FormGroup>
-                <Label for="examplehostname">Hostname</Label>
+          <Form>
+            <FormGroup row>
+              <Label for="examplehostname" sm={2}>
+                Hostname
+              </Label>
+              <Col sm={10}>
                 <Input
                   type="name"
                   name="hostname"
@@ -116,9 +131,13 @@ class AddModal extends React.Component {
                   placeholder="Enter Hostname"
                   onChange={this.handleHostnameChange}
                 />
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleip">IP</Label>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleip" sm={2}>
+                IP
+              </Label>
+              <Col sm={10}>
                 <Input
                   type="name"
                   name="ip"
@@ -126,9 +145,13 @@ class AddModal extends React.Component {
                   placeholder="Enter IP Address"
                   onChange={this.handleIpChange}
                 />
-              </FormGroup>
-              <FormGroup>
-                <Label for="examplemac">MAC</Label>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="examplemac" sm={2}>
+                MAC
+              </Label>
+              <Col sm={10}>
                 <Input
                   type="name"
                   name="mac"
@@ -136,9 +159,13 @@ class AddModal extends React.Component {
                   placeholder="Enter MAC Address"
                   onChange={this.handleMacChange}
                 />
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleSelect">Select Status</Label>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleSelect" sm={2}>
+                Select Status
+              </Label>
+              <Col sm={10}>
                 <Input
                   type="select"
                   name="selectStatus"
@@ -152,9 +179,13 @@ class AddModal extends React.Component {
                     </option>
                   ))}
                 </Input>
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleSelect">Select OS</Label>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="exampleSelect" sm={2}>
+                Select OS
+              </Label>
+              <Col sm={10}>
                 <Input
                   type="select"
                   name="selectOS"
@@ -166,30 +197,11 @@ class AddModal extends React.Component {
                     <option key={i}>{this.state.osDictionary[os]}</option>
                   ))}
                 </Input>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="success"
-              onClick={() =>
-                this.handleAdd(
-                  this.state.hostname,
-                  this.state.status,
-                  this.state.os,
-                  this.state.ip,
-                  this.state.mac
-                )
-              }
-            >
-              ADD
-            </Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>
-              CANCEL
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+              </Col>
+            </FormGroup>
+          </Form>
+        </Dialog>
+      </MuiThemeProvider>
     );
   }
 }
