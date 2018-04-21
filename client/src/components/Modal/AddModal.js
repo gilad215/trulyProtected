@@ -46,8 +46,6 @@ class AddModal extends React.Component {
           });
         });
       });
-    console.log('statusDict:', this.state.statusDictionary);
-    console.log('osDict:', this.state.osDictionary);
   };
 
   handleAdd = (hostname, status, os, ip, mac) => {

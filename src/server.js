@@ -91,6 +91,7 @@ function deleteMachine(req, res) {
     connection.query(query, (error, result) => {
       if (!error) {
         console.log(result);
+        res.json({ code: 200, status: result });
       } else {
         res.json({ code: 100, status: 'Data invalid' });
       }
@@ -122,6 +123,7 @@ function insertMachine(req, res) {
 
     connection.query(query, (error, result) => {
       if (!error) {
+        res.json({ code: 200, status: query });
         console.log(result);
       } else {
         res.json({ code: 100, status: 'Data invalid' });

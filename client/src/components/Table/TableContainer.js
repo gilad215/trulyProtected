@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Col } from 'react-bootstrap';
+import { Alert } from 'reactstrap';
 import Table from './Table';
 import AddModal from '../Modal/AddModal';
 
@@ -11,17 +13,18 @@ class TableContainer extends React.Component {
     this.state = {
       tableData: [],
       statusDictionary: {},
-      osDictionary: {}
+      osDictionary: {},
+      showAlert: false
     };
     this.modalRef = React.createRef();
   }
 
   componentDidMount() {
     this.getDictionary(this.props.dictionaryURL);
-    setInterval(
-      () => this.fetchData(this.props.url, this.props.dictionaryURL),
-      3000
-    );
+    // setInterval(
+    //   () => this.fetchData(this.props.url, this.props.dictionaryURL),
+    //   3000
+    // );
   }
 
   getDictionary = async dictionaryURL => {
@@ -44,23 +47,21 @@ class TableContainer extends React.Component {
 
   fetchData = async (dataURL, dictionaryURL) => {
     let joinedData;
-    await fetch(dataURL)
-      .then(results => results.json())
-      .then(data => {
-        joinedData = data;
-        joinedData.forEach(element => {
-          if (this.state.statusDictionary[element.status] !== undefined)
-            element.status = this.state.statusDictionary[element.status];
-          else element.status = 'N/A';
-          if (this.state.osDictionary[element.os] !== undefined)
-            element.os = this.state.osDictionary[element.os];
-          else element.os = 'N/A';
-        });
+    await axios.get(dataURL).then(response => {
+      joinedData = response.data;
+      joinedData.forEach(element => {
+        if (this.state.statusDictionary[element.status] !== undefined)
+          element.status = this.state.statusDictionary[element.status];
+        else element.status = 'N/A';
+        if (this.state.osDictionary[element.os] !== undefined)
+          element.os = this.state.osDictionary[element.os];
+        else element.os = 'N/A';
       });
+    });
     this.setState({ tableData: joinedData });
   };
 
-  handleAdd = async (hostname, status, os, ip, mac) => {
+  handleAdd = (hostname, status, os, ip, mac) => {
     const machine = {
       hostname,
       ip,
@@ -68,34 +69,69 @@ class TableContainer extends React.Component {
       status,
       os
     };
-    console.log('machine: ', JSON.stringify(machine));
-    await fetch('http://localhost:3000/insert', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(machine)
-    });
+    axios
+      .post('http://localhost:3000/insert', machine)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            showAlert: true,
+            alertText: `Added Machine Successfully`,
+            alertType: 'success'
+          });
+          this.fetchData(this.props.url, this.props.dictionaryURL);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          showAlert: true,
+          alertText: `Error adding machine`,
+          alertType: 'danger'
+        });
+      });
   };
 
-  handleDelete = async id => {
-    await fetch(`http://localhost:3000/delete/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
+  handleDelete = id => {
+    axios
+      .delete(`http://localhost:3000/delete/${id}`)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({
+            showAlert: true,
+            alertText: `Deleted Machine Successfully`,
+            alertType: 'danger'
+          });
+          this.fetchData(this.props.url, this.props.dictionaryURL);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          showAlert: true,
+          alertText: `Error deleting machine`,
+          alertType: 'danger'
+        });
+      });
   };
 
   deployAdd = () => {
     this.modalRef.current.toggle();
   };
 
+  toggleAlert = () => {
+    this.setState({ showAlert: false });
+  };
+
   render() {
     return (
       <Col xs={12} md={12}>
+        <Alert
+          color={this.state.alertType}
+          isOpen={this.state.showAlert}
+          toggle={this.toggleAlert}
+        >
+          {this.state.alertText}
+        </Alert>
         <AddModal
           dictionaryURL="http://localhost:5000/getdictionary"
           handleAdd={this.handleAdd}

@@ -47,7 +47,6 @@ class DetailsModal extends React.Component {
   };
 
   render() {
-    console.log('data:', this.props.data);
     return (
       <Modal
         isOpen={this.state.modal}

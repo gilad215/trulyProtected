@@ -18,8 +18,6 @@ class Table extends React.Component {
 
   onRowClick = (state, rowInfo, column) => ({
     onClick: (e, handleOriginal) => {
-      console.log('row clicked!');
-      console.log('show?', this.state.showRowBool);
       this.setState({
         showRowBool: !this.state.showRowBool,
         showRowInfo: rowInfo
