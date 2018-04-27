@@ -92,7 +92,7 @@ class Table extends React.Component {
     return (
       <div>
         <this.StyledTable
-          className="-highlight -striped"
+          className="-highlight"
           data={this.props.tableData}
           columns={this.columns}
           defaultPageSize={10}

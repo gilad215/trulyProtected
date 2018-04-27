@@ -8,6 +8,7 @@ import TableContainer from './components/Table/TableContainer';
 import Charts from './components/Charts/Charts';
 import NanoNavbar from './components/NavBar/NavBar';
 import NavAlert from './components/Alert/NavAlert';
+import Footer from './components/Footer/Footer';
 
 class App extends React.Component {
   constructor(props) {
@@ -89,6 +90,7 @@ class App extends React.Component {
           </Row>
           <Charts tableData={this.state.tableData} />
         </Grid>
+        <Footer />
       </div>
     );
   }

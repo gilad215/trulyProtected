@@ -96,10 +96,22 @@ class Charts extends React.Component {
     return (
       <Row>
         <Col md={6} xs={12}>
-          <Doughnut data={this.state.statusChartData} />
+          <Doughnut
+            data={this.state.statusChartData}
+            height={250}
+            options={{
+              maintainAspectRatio: false
+            }}
+          />
         </Col>
         <Col md={6} xs={12}>
-          <Doughnut data={this.state.osChartData} />
+          <Doughnut
+            data={this.state.osChartData}
+            height={250}
+            options={{
+              maintainAspectRatio: false
+            }}
+          />
         </Col>
       </Row>
     );
