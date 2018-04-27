@@ -54,7 +54,9 @@ class TableContainer extends React.Component {
         else element.os = 'N/A';
       });
     });
-    this.setState({ tableData: joinedData });
+    this.setState({ tableData: joinedData }, () => {
+      this.props.updateCharts(this.state.tableData);
+    });
   };
 
   handleAdd = (hostname, status, os, ip, mac) => {
@@ -132,7 +134,8 @@ class TableContainer extends React.Component {
 TableContainer.propTypes = {
   url: PropTypes.string.isRequired,
   dictionaryURL: PropTypes.string.isRequired,
-  handleAlert: PropTypes.func.isRequired
+  handleAlert: PropTypes.func.isRequired,
+  updateCharts: PropTypes.func.isRequired
 };
 
 export default TableContainer;

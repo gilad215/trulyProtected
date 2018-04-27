@@ -5,6 +5,7 @@ import { Grid, Row } from 'react-bootstrap';
 import { Nav, NavbarBrand, NavItem, Button } from 'reactstrap';
 import '../node_modules/grommet-css';
 import TableContainer from './components/Table/TableContainer';
+import Charts from './components/Charts/Charts';
 import NanoNavbar from './components/NavBar/NavBar';
 import NavAlert from './components/Alert/NavAlert';
 
@@ -14,7 +15,8 @@ class App extends React.Component {
     this.handler = React.createRef();
     this.state = {
       alertType: 'success',
-      showAlert: false
+      showAlert: false,
+      tableData: []
     };
   }
 
@@ -42,6 +44,10 @@ class App extends React.Component {
         alertText: 'ERROR'
       });
     }
+  };
+
+  updateCharts = tableData => {
+    this.setState({ tableData });
   };
 
   toggleAlert = () => {
@@ -78,8 +84,10 @@ class App extends React.Component {
               dictionaryURL="http://localhost:5000/getdictionary"
               ref={this.handler}
               handleAlert={this.handleAlert}
+              updateCharts={this.updateCharts}
             />
           </Row>
+          <Charts tableData={this.state.tableData} />
         </Grid>
       </div>
     );
