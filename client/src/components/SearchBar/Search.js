@@ -17,6 +17,10 @@ class SearchBar extends React.Component {
     });
   };
 
+  resetSearch = () => {
+    this.props.search('');
+  };
+
   render() {
     return (
       <Search

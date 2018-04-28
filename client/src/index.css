@@ -35,11 +35,6 @@ body {
   float:right;
 }
 
-#searchForm {
-  margin-right: 5px;
-  margin-bottom: 0;
-}
-
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -68,12 +63,12 @@ body {
 }
 
 .grommetux-search {
-  margin-right: 5px;
   background-color: white;
 }
 
 input[type="search"] {
   border-radius: 5px !important;
   max-height: 38px !important;
+  color: #666 !important;
 }
 

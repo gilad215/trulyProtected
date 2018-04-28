@@ -15,6 +15,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.handler = React.createRef();
+    this.searchHandler = React.createRef();
     this.state = {
       alertType: 'success',
       showAlert: false,
@@ -49,11 +50,12 @@ class App extends React.Component {
   };
 
   search = value => {
-    console.log('SEARCH:', value);
+    this.handler.current.handleSearch(value);
   };
 
   updateCharts = tableData => {
     this.setState({ tableData });
+    this.searchHandler.current.resetSearch();
   };
 
   toggleAlert = () => {
@@ -76,13 +78,13 @@ class App extends React.Component {
                 alertText={this.state.alertText}
               />
             </NavItem>
-            <NavItem>
-              <SearchBar search={this.search} />
-            </NavItem>
-            <NavItem href="/">
+            <NavItem href="/" style={{ marginRight: '5px' }}>
               <Button outline color="success" onClick={this.addMachine}>
-                ADD MACHINE
+                Add Machine
               </Button>{' '}
+            </NavItem>
+            <NavItem>
+              <SearchBar search={this.search} ref={this.searchHandler} />
             </NavItem>
           </Nav>
         </NanoNavbar>

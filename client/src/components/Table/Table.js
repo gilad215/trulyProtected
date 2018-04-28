@@ -96,7 +96,6 @@ class Table extends React.Component {
           data={this.props.tableData}
           columns={this.columns}
           defaultPageSize={10}
-          filterable
           getTrProps={this.onRowClick}
         />
         {this.state.showRowBool && (

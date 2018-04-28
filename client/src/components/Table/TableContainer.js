@@ -12,6 +12,8 @@ class TableContainer extends React.Component {
 
     this.state = {
       tableData: [],
+      filteredData: [],
+      isSearching: false,
       statusDictionary: {},
       osDictionary: {},
       showAlert: false
@@ -41,24 +43,54 @@ class TableContainer extends React.Component {
     this.fetchData(this.props.url, this.props.dictionaryURL);
   };
 
-  fetchData = async (dataURL, dictionaryURL) => {
-    let joinedData;
-    await axios.get(dataURL).then(response => {
-      joinedData = response.data;
-      joinedData.forEach(element => {
-        if (this.state.statusDictionary[element.status] !== undefined)
-          element.status = this.state.statusDictionary[element.status];
-        else element.status = 'N/A';
-        if (this.state.osDictionary[element.os] !== undefined)
-          element.os = this.state.osDictionary[element.os];
-        else element.os = 'N/A';
-      });
-    });
-    this.setState({ tableData: joinedData }, () => {
-      this.props.updateCharts(this.state.tableData);
-    });
+  getTable = () => {
+    if (this.state.isSearching) return this.state.filteredData;
+    return this.state.tableData;
   };
 
+  handleDelete = id => {
+    axios
+      .delete(`http://localhost:3000/delete/${id}`)
+      .then(response => {
+        if (response.status === 200) {
+          this.props.handleAlert('delsuccess');
+          this.fetchData(this.props.url, this.props.dictionaryURL);
+        }
+      })
+      .catch(error => {
+        this.props.handleAlert('danger');
+      });
+  };
+
+  handleSearch = value => {
+    if (value !== '') {
+      this.setState({ isSearching: true });
+      const filteredData = [];
+      this.state.tableData.forEach(row => {
+        const values = Object.values(row);
+        for (let i = 0; i < values.length; i++) {
+          if (typeof values[i] === 'string' && values[i].indexOf(value) > -1) {
+            filteredData.push(row);
+            break;
+          }
+          if (
+            typeof values[i] === 'number' &&
+            values[i].toString().indexOf(value) > -1
+          ) {
+            filteredData.push(row);
+            break;
+          }
+        }
+      });
+      this.setState({ filteredData });
+    } else {
+      this.setState({ isSearching: false });
+    }
+  };
+
+  deployAdd = () => {
+    this.modalRef.current.toggle();
+  };
   handleAdd = (hostname, status, os, ip, mac) => {
     const machine = {
       hostname,
@@ -76,28 +108,26 @@ class TableContainer extends React.Component {
         }
       })
       .catch(error => {
-        console.log(error);
         this.props.handleAlert('danger');
       });
   };
 
-  handleDelete = id => {
-    axios
-      .delete(`http://localhost:3000/delete/${id}`)
-      .then(response => {
-        if (response.status === 200) {
-          this.props.handleAlert('delsuccess');
-          this.fetchData(this.props.url, this.props.dictionaryURL);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        this.props.handleAlert('danger');
+  fetchData = async (dataURL, dictionaryURL) => {
+    let joinedData;
+    await axios.get(dataURL).then(response => {
+      joinedData = response.data;
+      joinedData.forEach(element => {
+        if (this.state.statusDictionary[element.status] !== undefined)
+          element.status = this.state.statusDictionary[element.status];
+        else element.status = 'N/A';
+        if (this.state.osDictionary[element.os] !== undefined)
+          element.os = this.state.osDictionary[element.os];
+        else element.os = 'N/A';
       });
-  };
-
-  deployAdd = () => {
-    this.modalRef.current.toggle();
+    });
+    this.setState({ tableData: joinedData }, () => {
+      this.props.updateCharts(this.state.tableData);
+    });
   };
 
   toggleAlert = () => {
@@ -121,7 +151,7 @@ class TableContainer extends React.Component {
         />
 
         <Table
-          tableData={this.state.tableData}
+          tableData={this.getTable()}
           url={this.props.url}
           dictionaryURL={this.props.dictionaryURL}
           handleDelete={this.handleDelete}
