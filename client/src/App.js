@@ -9,6 +9,7 @@ import Charts from './components/Charts/Charts';
 import NanoNavbar from './components/NavBar/NavBar';
 import NavAlert from './components/Alert/NavAlert';
 import Footer from './components/Footer/Footer';
+import SearchBar from './components/SearchBar/Search';
 
 class App extends React.Component {
   constructor(props) {
@@ -47,6 +48,10 @@ class App extends React.Component {
     }
   };
 
+  search = value => {
+    console.log('SEARCH:', value);
+  };
+
   updateCharts = tableData => {
     this.setState({ tableData });
   };
@@ -70,6 +75,9 @@ class App extends React.Component {
                 toggleAlert={this.toggleAlert}
                 alertText={this.state.alertText}
               />
+            </NavItem>
+            <NavItem>
+              <SearchBar search={this.search} />
             </NavItem>
             <NavItem href="/">
               <Button outline color="success" onClick={this.addMachine}>
