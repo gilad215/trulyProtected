@@ -100,9 +100,11 @@ class Table extends React.Component {
         />
         {this.state.showRowBool && (
           <DetailsModal
-            data={this.state.showRowInfo}
+            id={this.state.showRowInfo.row.id}
             toggle={this.toggleDataModal}
             handleDelete={this.props.handleDelete}
+            dictionaryURL="http://localhost:5000/getSeverities"
+            dataURL="http://localhost:5000/logs"
           />
         )}
       </div>

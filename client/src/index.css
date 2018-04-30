@@ -1,38 +1,37 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Oxygen', sans-serif;
 }
 
-#tpImage{
+#tpImage {
   height: 100px;
-  margin-left:35%;
-  margin-top:10%;
+  margin-left: 35%;
+  margin-top: 10%;
   text-align: center;
 }
 
-#logoimg{
+#logoimg {
   height: 30px;
   width: 30px;
   margin-right: 5px;
 }
 
-.rights{
-  margin-top:40px;
-  text-align:center;
+.rights {
+  margin-top: 40px;
+  text-align: center;
 }
 
-#tpRights{
+#tpRights {
   padding-right: 80px;
 }
 
-#ImageRights{
+#ImageRights {
   height: 20px;
   float: right;
 }
 
-#bankRights{
-  float:right;
+#bankRights {
+  float: right;
 }
 
 .navbar-brand {
@@ -66,9 +65,8 @@ body {
   background-color: white;
 }
 
-input[type="search"] {
+input[type='search'] {
   border-radius: 5px !important;
   max-height: 38px !important;
   color: #666 !important;
 }
-

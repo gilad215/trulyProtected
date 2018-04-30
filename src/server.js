@@ -36,6 +36,52 @@ function getMachines(req, res) {
   });
 }
 
+function getLogs(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log(`connected as id ${connection.threadId}`);
+
+    connection.query('select * from logs', (error, rows) => {
+      connection.release();
+      if (!error) {
+        res.json(rows);
+      }
+    });
+
+    connection.on('error', error => {
+      res.json({ code: error, status: 'Error in connection database' });
+    });
+  });
+}
+
+function getSeverities(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log(`connected as id ${connection.threadId}`);
+
+    connection.query('select * from severities', (error, rows) => {
+      connection.release();
+      if (!error) {
+        res.json(rows);
+      }
+    });
+
+    connection.on('error', error => {
+      res.json({ code: error, status: 'Error in connection database' });
+    });
+  });
+}
+
 function getDictionary(req, res) {
   pool.getConnection((err, connection) => {
     if (err) {
@@ -72,6 +118,31 @@ function getDictionary(req, res) {
 
     connection.on('error', error => {
       res.json({ code: 100, status: 'Error in connection database' });
+    });
+  });
+}
+function getMachineLogs(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log('getting logs from:', req.params.id);
+
+    connection.query(
+      `select * from logs where machineId=${req.params.id}`,
+      (error, rows) => {
+        connection.release();
+        if (!error) {
+          res.json(rows);
+        }
+      }
+    );
+
+    connection.on('error', error => {
+      res.json({ code: error, status: 'Error in connection database' });
     });
   });
 }
@@ -166,8 +237,20 @@ app.get('/machines', (req, res) => {
   getMachines(req, res);
 });
 
+app.get('/logs', (req, res) => {
+  getLogs(req, res);
+});
+
+app.get('/logs/:id', (req, res) => {
+  getMachineLogs(req, res);
+});
+
 app.get('/getDictionary', (req, res) => {
   getDictionary(req, res);
+});
+
+app.get('/getSeverities', (req, res) => {
+  getSeverities(req, res);
 });
 
 app.post('/insert', (req, res) => {
