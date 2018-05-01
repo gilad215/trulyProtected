@@ -23,7 +23,7 @@ class DetailsModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: true,
+      modal: false,
       nestedModal: false,
       activeTab: '1',
       severeDictionary: {},
@@ -60,7 +60,9 @@ class DetailsModal extends React.Component {
   };
 
   toggle = () => {
-    this.props.toggle();
+    this.setState({
+      modal: !this.state.modal
+    });
   };
 
   toggleNested = () => {
@@ -190,7 +192,6 @@ class DetailsModal extends React.Component {
 
 DetailsModal.propTypes = {
   id: Proptypes.number.isRequired,
-  toggle: Proptypes.func.isRequired,
   handleDelete: Proptypes.func.isRequired,
   dictionaryURL: Proptypes.string.isRequired,
   dataURL: Proptypes.string.isRequired,

@@ -14,7 +14,7 @@ class DetailsTable extends React.Component {
   columns = [
     {
       Header: 'Date',
-      minWidth: 120,
+      width: 200,
       accessor: 'time',
       Cell: row => (
         <span>
@@ -26,7 +26,8 @@ class DetailsTable extends React.Component {
     },
     {
       Header: 'User',
-      accessor: 'user'
+      accessor: 'user',
+      width: 100
     },
     {
       Header: 'Severity',

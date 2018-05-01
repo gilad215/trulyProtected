@@ -112,7 +112,7 @@ class AddModal extends React.Component {
     return (
       <MuiThemeProvider>
         <Dialog
-          title="ADD MACHINE"
+          title="Add Machine"
           actions={actions}
           modal={false}
           open={this.state.modal}

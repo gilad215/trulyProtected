@@ -12,24 +12,24 @@ class Table extends React.Component {
     super(props);
 
     this.state = {
-      showRowBool: false,
       showRowInfo: {}
     };
+    this.handler = React.createRef();
   }
 
   onRowClick = (state, rowInfo, column) => ({
     onClick: (e, handleOriginal) => {
-      this.setState({
-        showRowBool: !this.state.showRowBool,
-        showRowInfo: rowInfo
-      });
+      this.setState(
+        {
+          showRowInfo: rowInfo
+        },
+        () => this.toggleDataModal()
+      );
     }
   });
 
   toggleDataModal = () => {
-    this.setState({
-      showRowBool: !this.state.showRowBool
-    });
+    this.handler.current.toggle();
   };
 
   StyledTable = styled(ReactTable)`
@@ -98,13 +98,14 @@ class Table extends React.Component {
           defaultPageSize={10}
           getTrProps={this.onRowClick}
         />
-        {this.state.showRowBool && (
+        {this.state.showRowInfo.row !== undefined && (
           <DetailsModal
             id={this.state.showRowInfo.row.id}
             toggle={this.toggleDataModal}
             handleDelete={this.props.handleDelete}
             dictionaryURL="http://localhost:5000/getSeverities"
             dataURL="http://localhost:5000/logs"
+            ref={this.handler}
           />
         )}
       </div>

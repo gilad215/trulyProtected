@@ -100,7 +100,9 @@ class App extends React.Component {
           </Row>
           <Charts tableData={this.state.tableData} />
         </Grid>
-        <Footer />
+        <Row style={{ marginTop: '50px' }}>
+          <Footer />
+        </Row>
       </div>
     );
   }
