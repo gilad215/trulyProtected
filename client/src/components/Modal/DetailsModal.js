@@ -34,18 +34,23 @@ class DetailsModal extends React.Component {
     await fetch(this.props.dictionaryURL)
       .then(results => results.json())
       .then(data => {
-        console.log('FETCHIND:', this.props.dictionaryURL, data);
         data.forEach(element => {
           this.setState(prevstate => {
             prevstate.severeDictionary[element.id] = element.name;
           });
         });
       });
+    this.fetchLogs(this.props.id);
+  };
+
+  componentWillReceiveProps = nextProps => {
+    this.fetchLogs(nextProps.id);
+  };
+  fetchLogs = async id => {
     let joinedData;
-    await axios.get(`${this.props.dataURL}/${this.props.id}`).then(response => {
+    await axios.get(`${this.props.dataURL}/${id}`).then(response => {
       joinedData = response.data;
       joinedData.forEach(element => {
-        console.log('ELEMENT:', element);
         if (this.state.severeDictionary[element.severityId] !== undefined)
           element.severityId = this.state.severeDictionary[element.severityId];
         else element.severityId = 'N/A';
