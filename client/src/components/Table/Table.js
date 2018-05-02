@@ -105,6 +105,7 @@ class Table extends React.Component {
             handleDelete={this.props.handleDelete}
             dictionaryURL="http://localhost:5000/getSeverities"
             dataURL="http://localhost:5000/logs"
+            loginInfo="http://localhost:5000/logininfo"
             ref={this.handler}
           />
         )}

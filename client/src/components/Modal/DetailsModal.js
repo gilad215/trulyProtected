@@ -26,11 +26,12 @@ class DetailsModal extends React.Component {
       modal: false,
       nestedModal: false,
       activeTab: '1',
+      user: {},
       severeDictionary: {},
       tableData: []
     };
   }
-  componentDidMount = async () => {
+  componentWillMount = async () => {
     await fetch(this.props.dictionaryURL)
       .then(results => results.json())
       .then(data => {
@@ -57,6 +58,9 @@ class DetailsModal extends React.Component {
       });
     });
     this.setState({ tableData: joinedData });
+    await axios.get(`${this.props.loginInfo}/${id}`).then(response => {
+      this.setState({ user: response.data[0] });
+    });
   };
 
   handleDelete = id => {
@@ -89,6 +93,10 @@ class DetailsModal extends React.Component {
         activeTab: tab
       });
     }
+  };
+
+  userFunc = () => {
+    window.open(`mailto:${this.state.user.email}`);
   };
 
   render() {
@@ -158,10 +166,11 @@ class DetailsModal extends React.Component {
                     <Card body>
                       <CardTitle>Login Information</CardTitle>
                       <CardText>
-                        The current logged user is X, Last logon was YZ.
+                        Last Logged User is {this.state.user.user}, At{' '}
+                        {this.state.user.lastLogin}
                       </CardText>
-                      <Button onClick={() => this.props.userFunc()}>
-                        Message X
+                      <Button onClick={() => this.userFunc()}>
+                        Mail {this.state.user.user}
                       </Button>
                     </Card>
                   </Col>
@@ -200,11 +209,7 @@ DetailsModal.propTypes = {
   handleDelete: Proptypes.func.isRequired,
   dictionaryURL: Proptypes.string.isRequired,
   dataURL: Proptypes.string.isRequired,
-  userFunc: Proptypes.func
-};
-
-DetailsModal.defaultProps = {
-  userFunc: null
+  loginInfo: Proptypes.string.isRequired
 };
 
 export default DetailsModal;

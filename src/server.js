@@ -147,6 +147,32 @@ function getMachineLogs(req, res) {
   });
 }
 
+function getLoginInfo(req, res) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      res.json({ code: 100, status: 'Error in connection database' });
+      return;
+    }
+
+    console.log('getting login info from:', req.params.id);
+
+    connection.query(
+      `select * from logininfo where machineId=${req.params.id}`,
+      (error, rows) => {
+        connection.release();
+        if (!error) {
+          res.json(rows);
+        }
+      }
+    );
+
+    connection.on('error', error => {
+      res.json({ code: error, status: 'Error in connection database' });
+    });
+  });
+}
+
 function deleteMachine(req, res) {
   pool.getConnection((err, connection) => {
     if (err) {
@@ -243,6 +269,10 @@ app.get('/logs', (req, res) => {
 
 app.get('/logs/:id', (req, res) => {
   getMachineLogs(req, res);
+});
+
+app.get('/logininfo/:id', (req, res) => {
+  getLoginInfo(req, res);
 });
 
 app.get('/getDictionary', (req, res) => {
