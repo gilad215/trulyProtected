@@ -3,14 +3,10 @@ import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styled from 'styled-components';
+import { Button } from 'reactstrap';
 import StatusIcon from '../Icons/StatusIcon';
 
 class DetailsTable extends React.Component {
-  StyledTable = styled(ReactTable)`
-    border-radius: 8px;
-  `;
-
   columns = [
     {
       Header: 'Date',
@@ -69,12 +65,28 @@ class DetailsTable extends React.Component {
     {
       Header: 'Message',
       accessor: 'logMessage'
+    },
+    {
+      Header: 'Email',
+      width: 55,
+      accessor: 'email',
+      Cell: row => (
+        <Button
+          outline
+          block
+          color="primary"
+          size="sm"
+          onClick={() => window.open(`mailto:${row.value}`)}
+        >
+          Mail
+        </Button>
+      )
     }
   ];
 
   render() {
     return (
-      <this.StyledTable
+      <ReactTable
         className="-highlight"
         data={this.props.tableData}
         columns={this.columns}

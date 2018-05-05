@@ -132,7 +132,9 @@ function getMachineLogs(req, res) {
     console.log('getting logs from:', req.params.id);
 
     connection.query(
-      `select * from logs where machineId=${req.params.id}`,
+      `select machineId, users.name as user, time, severityId, logMessage, users.email as email from logs inner join users on users.id=logs.userId where logs.machineId=${
+        req.params.id
+      };`,
       (error, rows) => {
         connection.release();
         if (!error) {
@@ -158,7 +160,9 @@ function getLoginInfo(req, res) {
     console.log('getting login info from:', req.params.id);
 
     connection.query(
-      `select * from logininfo where machineId=${req.params.id}`,
+      `select lastLogin, users.name as user, users.email as email from logininfo inner join users on users.id=logininfo.userId where machineId=${
+        req.params.id
+      }`,
       (error, rows) => {
         connection.release();
         if (!error) {

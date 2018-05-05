@@ -18,6 +18,7 @@ import {
 import Dialog from 'material-ui/Dialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import DetailsTable from '../Table/DetailsTable';
+import UserTable from '../Table/UserTable';
 
 class DetailsModal extends React.Component {
   constructor(props) {
@@ -26,9 +27,9 @@ class DetailsModal extends React.Component {
       modal: false,
       nestedModal: false,
       activeTab: '1',
-      user: {},
       severeDictionary: {},
-      tableData: []
+      logsTable: [],
+      userTable: []
     };
   }
   componentWillMount = async () => {
@@ -42,24 +43,33 @@ class DetailsModal extends React.Component {
         });
       });
     this.fetchLogs(this.props.id);
+    this.fetchUsers(this.props.id);
   };
 
   componentWillReceiveProps = nextProps => {
     this.fetchLogs(nextProps.id);
+    this.fetchUsers(nextProps.id);
   };
   fetchLogs = async id => {
     let joinedData;
     await axios.get(`${this.props.dataURL}/${id}`).then(response => {
       joinedData = response.data;
+
       joinedData.forEach(element => {
-        if (this.state.severeDictionary[element.severityId] !== undefined)
+        if (this.state.severeDictionary[element.severityId] !== undefined) {
           element.severityId = this.state.severeDictionary[element.severityId];
-        else element.severityId = 'N/A';
+        } else element.severityId = 'N/A';
       });
     });
-    this.setState({ tableData: joinedData });
+    if (joinedData.length > 0) {
+      this.setState({ logsTable: joinedData });
+    }
+  };
+
+  fetchUsers = async id => {
     await axios.get(`${this.props.loginInfo}/${id}`).then(response => {
-      this.setState({ user: response.data[0] });
+      console.log(response.data);
+      this.setState({ userTable: response.data });
     });
   };
 
@@ -95,8 +105,8 @@ class DetailsModal extends React.Component {
     }
   };
 
-  userFunc = () => {
-    window.open(`mailto:${this.state.user.email}`);
+  maintenanceFunc = () => {
+    console.log('Maintenance!');
   };
 
   render() {
@@ -148,29 +158,52 @@ class DetailsModal extends React.Component {
                     this.toggleTab('2');
                   }}
                 >
+                  Users
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  href="#"
+                  className={classnames({
+                    active: this.state.activeTab === '3'
+                  })}
+                  onClick={() => {
+                    this.toggleTab('3');
+                  }}
+                >
                   Actions
                 </NavLink>
               </NavItem>
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
               <TabPane tabId="1">
-                <Row>
+                <Row style={{ height: '300px' }}>
                   <Col sm="12">
-                    <DetailsTable tableData={this.state.tableData} />
+                    <DetailsTable tableData={this.state.logsTable} />
                   </Col>
                 </Row>
               </TabPane>
               <TabPane tabId="2">
-                <Row style={{ height: '274px' }}>
+                <Row style={{ height: '300px' }}>
+                  <Col sm="12">
+                    <UserTable tableData={this.state.userTable} />
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane tabId="3">
+                <Row style={{ height: '300px' }}>
                   <Col sm="6" style={{ marginTop: '15px' }}>
                     <Card body>
-                      <CardTitle>Login Information</CardTitle>
+                      <CardTitle>Run Maintenance</CardTitle>
                       <CardText>
-                        Last Logged User is {this.state.user.user}, At{' '}
-                        {this.state.user.lastLogin}
+                        Running Maintenance on this Machine will automatically
+                        log off every user and suspend it.
                       </CardText>
-                      <Button onClick={() => this.userFunc()}>
-                        Mail {this.state.user.user}
+                      <Button
+                        color="info"
+                        onClick={() => this.maintenanceFunc()}
+                      >
+                        MAINTENANCE
                       </Button>
                     </Card>
                   </Col>
@@ -178,7 +211,8 @@ class DetailsModal extends React.Component {
                     <Card body>
                       <CardTitle>Delete Machine</CardTitle>
                       <CardText>
-                        This cannot be undone. Please use with caution.
+                        Deleting the Machine will Erase all encrypted Data on
+                        it. This cannot be undone. Please use with caution.
                       </CardText>
                       <Button color="danger" onClick={this.toggleNested}>
                         DELETE MACHINE
