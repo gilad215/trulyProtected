@@ -10,7 +10,6 @@ class LogTable extends React.Component {
   columns = [
     {
       Header: 'Date',
-      width: 200,
       accessor: 'time',
       Cell: row => (
         <span>
@@ -19,6 +18,11 @@ class LogTable extends React.Component {
           {new Date(row.value).toLocaleTimeString()}
         </span>
       )
+    },
+    {
+      Header: 'Machine ID',
+      accessor: 'machineId',
+      width: 110
     },
     {
       Header: 'User',
@@ -62,13 +66,12 @@ class LogTable extends React.Component {
     },
     {
       Header: 'Message',
-      width: 290,
       accessor: 'logMessage'
     },
     {
       Header: 'Email',
-      width: 55,
       accessor: 'email',
+      width: 100,
       Cell: row => (
         <Button
           outline
@@ -97,6 +100,10 @@ class LogTable extends React.Component {
             desc: true
           }
         ]}
+        style={{
+          margin: '0 auto',
+          width: '90%'
+        }}
       />
     );
   }

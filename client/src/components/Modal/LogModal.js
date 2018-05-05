@@ -50,7 +50,7 @@ class LogModal extends React.Component {
           autoDetectWindowHeight
           autoScrollBodyContent
           repositionOnUpdate
-          contentStyle={{ width: '90%', height: '90%' }}
+          contentStyle={{ width: 'auto', maxWidth: 'none' }}
         >
           <Row>
             <LogTable tableData={this.state.tableData} />
