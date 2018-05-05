@@ -27,6 +27,10 @@ class App extends React.Component {
     this.handler.current.deployAdd();
   };
 
+  showLogs = () => {
+    this.handler.current.handleLogs();
+  };
+
   handleAlert = type => {
     if (type === 'addsuccess') {
       this.setState({
@@ -77,6 +81,11 @@ class App extends React.Component {
                 toggleAlert={this.toggleAlert}
                 alertText={this.state.alertText}
               />
+            </NavItem>
+            <NavItem href="/" style={{ marginRight: '5px' }}>
+              <Button outline color="info" onClick={this.showLogs}>
+                Activity Log
+              </Button>{' '}
             </NavItem>
             <NavItem href="/" style={{ marginRight: '5px' }}>
               <Button outline color="success" onClick={this.addMachine}>

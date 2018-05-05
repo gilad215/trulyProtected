@@ -46,12 +46,15 @@ function getLogs(req, res) {
 
     console.log(`connected as id ${connection.threadId}`);
 
-    connection.query('select * from logs', (error, rows) => {
-      connection.release();
-      if (!error) {
-        res.json(rows);
+    connection.query(
+      'select machineId, users.name as user, time, severities.name as severityId, logMessage, users.email as email from logs inner join users on users.id=logs.userId inner join severities on severities.id=logs.severityId;',
+      (error, rows) => {
+        connection.release();
+        if (!error) {
+          res.json(rows);
+        }
       }
-    });
+    );
 
     connection.on('error', error => {
       res.json({ code: error, status: 'Error in connection database' });

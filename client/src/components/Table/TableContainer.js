@@ -5,6 +5,7 @@ import { Col } from 'react-bootstrap';
 import { Alert } from 'reactstrap';
 import Table from './Table';
 import AddModal from '../Modal/AddModal';
+import LogModal from '../Modal/LogModal';
 
 class TableContainer extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class TableContainer extends React.Component {
       showAlert: false
     };
     this.modalRef = React.createRef();
+    this.logRef = React.createRef();
   }
 
   componentDidMount() {
@@ -60,6 +62,10 @@ class TableContainer extends React.Component {
       .catch(error => {
         this.props.handleAlert('danger');
       });
+  };
+
+  handleLogs = () => {
+    this.logRef.current.toggle();
   };
 
   handleSearch = value => {
@@ -149,6 +155,7 @@ class TableContainer extends React.Component {
           handleAdd={this.handleAdd}
           ref={this.modalRef}
         />
+        <LogModal url="http://localhost:5000/logs" ref={this.logRef} />
 
         <Table
           tableData={this.getTable()}
