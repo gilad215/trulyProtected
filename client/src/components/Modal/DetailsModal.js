@@ -16,7 +16,6 @@ import {
   Col
 } from 'reactstrap';
 import Dialog from 'material-ui/Dialog';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import DetailsTable from '../Table/DetailsTable';
 import UserTable from '../Table/UserTable';
 
@@ -125,115 +124,110 @@ class DetailsModal extends React.Component {
       </Button>
     ];
     return (
-      <MuiThemeProvider>
+      <Dialog
+        title={`Machine ${this.props.id}`}
+        actions={actions}
+        modal={false}
+        open={this.state.modal}
+        onRequestClose={this.toggle}
+      >
+        <div>
+          <Nav tabs>
+            <NavItem>
+              <NavLink
+                href="#"
+                className={classnames({
+                  active: this.state.activeTab === '1'
+                })}
+                onClick={() => {
+                  this.toggleTab('1');
+                }}
+              >
+                Activity
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                href="#"
+                className={classnames({
+                  active: this.state.activeTab === '2'
+                })}
+                onClick={() => {
+                  this.toggleTab('2');
+                }}
+              >
+                Users
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                href="#"
+                className={classnames({
+                  active: this.state.activeTab === '3'
+                })}
+                onClick={() => {
+                  this.toggleTab('3');
+                }}
+              >
+                Actions
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId="1">
+              <Row style={{ height: '300px' }}>
+                <Col sm="12">
+                  <DetailsTable tableData={this.state.logsTable} />
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="2">
+              <Row style={{ height: '300px' }}>
+                <Col sm="12">
+                  <UserTable tableData={this.state.userTable} />
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="3">
+              <Row style={{ height: '300px' }}>
+                <Col sm="6" style={{ marginTop: '15px' }}>
+                  <Card body>
+                    <CardTitle>Run Maintenance</CardTitle>
+                    <CardText>
+                      Running Maintenance on this Machine will automatically log
+                      off every user and suspend it.
+                    </CardText>
+                    <Button color="info" onClick={() => this.maintenanceFunc()}>
+                      MAINTENANCE
+                    </Button>
+                  </Card>
+                </Col>
+                <Col sm="6" style={{ marginTop: '15px' }}>
+                  <Card body>
+                    <CardTitle>Delete Machine</CardTitle>
+                    <CardText>
+                      Deleting the Machine will Erase all encrypted Data on it.
+                      This cannot be undone. Please use with caution.
+                    </CardText>
+                    <Button color="danger" onClick={this.toggleNested}>
+                      DELETE MACHINE
+                    </Button>
+                  </Card>
+                </Col>
+              </Row>
+            </TabPane>
+          </TabContent>
+        </div>
         <Dialog
-          title={`Machine ${this.props.id}`}
-          actions={actions}
-          modal={false}
-          open={this.state.modal}
-          onRequestClose={this.toggle}
+          title="Confirm Delete"
+          actions={nestedActions}
+          modal
+          open={this.state.nestedModal}
+          onRequestClose={this.toggleNested}
         >
-          <div>
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  href="#"
-                  className={classnames({
-                    active: this.state.activeTab === '1'
-                  })}
-                  onClick={() => {
-                    this.toggleTab('1');
-                  }}
-                >
-                  Activity
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  href="#"
-                  className={classnames({
-                    active: this.state.activeTab === '2'
-                  })}
-                  onClick={() => {
-                    this.toggleTab('2');
-                  }}
-                >
-                  Users
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  href="#"
-                  className={classnames({
-                    active: this.state.activeTab === '3'
-                  })}
-                  onClick={() => {
-                    this.toggleTab('3');
-                  }}
-                >
-                  Actions
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={this.state.activeTab}>
-              <TabPane tabId="1">
-                <Row style={{ height: '300px' }}>
-                  <Col sm="12">
-                    <DetailsTable tableData={this.state.logsTable} />
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="2">
-                <Row style={{ height: '300px' }}>
-                  <Col sm="12">
-                    <UserTable tableData={this.state.userTable} />
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="3">
-                <Row style={{ height: '300px' }}>
-                  <Col sm="6" style={{ marginTop: '15px' }}>
-                    <Card body>
-                      <CardTitle>Run Maintenance</CardTitle>
-                      <CardText>
-                        Running Maintenance on this Machine will automatically
-                        log off every user and suspend it.
-                      </CardText>
-                      <Button
-                        color="info"
-                        onClick={() => this.maintenanceFunc()}
-                      >
-                        MAINTENANCE
-                      </Button>
-                    </Card>
-                  </Col>
-                  <Col sm="6" style={{ marginTop: '15px' }}>
-                    <Card body>
-                      <CardTitle>Delete Machine</CardTitle>
-                      <CardText>
-                        Deleting the Machine will Erase all encrypted Data on
-                        it. This cannot be undone. Please use with caution.
-                      </CardText>
-                      <Button color="danger" onClick={this.toggleNested}>
-                        DELETE MACHINE
-                      </Button>
-                    </Card>
-                  </Col>
-                </Row>
-              </TabPane>
-            </TabContent>
-          </div>
-          <Dialog
-            title="Confirm Delete"
-            actions={nestedActions}
-            modal
-            open={this.state.nestedModal}
-            onRequestClose={this.toggleNested}
-          >
-            This cannot be undone. Please use with caution.
-          </Dialog>
+          This cannot be undone. Please use with caution.
         </Dialog>
-      </MuiThemeProvider>
+      </Dialog>
     );
   }
 }

@@ -3,7 +3,6 @@
 import React from 'react';
 import { Button, Row } from 'reactstrap';
 import Dialog from 'material-ui/Dialog';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LogTable from '../Table/LogTable';
 
 class LogModal extends React.Component {
@@ -40,23 +39,21 @@ class LogModal extends React.Component {
       </Button>
     ];
     return (
-      <MuiThemeProvider>
-        <Dialog
-          title="Activity Log"
-          actions={actions}
-          modal={false}
-          open={this.state.modal}
-          onRequestClose={this.toggle}
-          autoDetectWindowHeight
-          autoScrollBodyContent
-          repositionOnUpdate
-          contentStyle={{ width: 'auto', maxWidth: 'none' }}
-        >
-          <Row>
-            <LogTable tableData={this.state.tableData} />
-          </Row>
-        </Dialog>
-      </MuiThemeProvider>
+      <Dialog
+        title="Activity Log"
+        actions={actions}
+        modal={false}
+        open={this.state.modal}
+        onRequestClose={this.toggle}
+        autoDetectWindowHeight
+        autoScrollBodyContent
+        repositionOnUpdate
+        contentStyle={{ width: 'auto', maxWidth: 'none' }}
+      >
+        <Row>
+          <LogTable tableData={this.state.tableData} />
+        </Row>
+      </Dialog>
     );
   }
 }

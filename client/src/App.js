@@ -1,6 +1,7 @@
 import React from 'react';
 import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Grid, Row } from 'react-bootstrap';
 import { Nav, NavbarBrand, NavItem, Button } from 'reactstrap';
 import '../node_modules/grommet-css';
@@ -68,7 +69,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <MuiThemeProvider>
         <NanoNavbar color="Collapsed" light expand="md" fixed="top">
           <NavbarBrand id="tpTitle" href="/">
             <img id="logoimg" src="/logo.ico" alt="" /> TrulyProtect
@@ -112,7 +113,7 @@ class App extends React.Component {
         <Row style={{ marginTop: '50px' }}>
           <Footer />
         </Row>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
